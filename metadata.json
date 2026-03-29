@@ -1,0 +1,5 @@
+{
+  "name": "ARC Cognitive Experiment",
+  "description": "A cognitive science experiment platform evaluating human-AI interaction using the Abstraction and Reasoning Corpus (ARC). Features behavioral telemetry, Automated Wizard of Oz, and RLHF simulation.",
+  "requestFramePermissions": []
+}

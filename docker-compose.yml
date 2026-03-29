@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: arc_exp_postgres
+    environment:
+      POSTGRES_DB: arc_experiment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d arc_experiment"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: arc_exp_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/arc_experiment
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: arc_exp_metabase
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: arc_experiment
+      MB_DB_PORT: 5432
+      MB_DB_USER: postgres
+      MB_DB_PASS: postgres
+      MB_DB_HOST: postgres
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

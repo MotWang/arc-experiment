@@ -1,0 +1,86 @@
+[
+  {
+    "id": "1386ff44-cb6c-453e-b953-6d08d09363a2",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:15:21"
+  },
+  {
+    "id": "7c916b51-9e1c-4929-ad2c-2ccab1e62c96",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:16:22"
+  },
+  {
+    "id": "a2cd89b7-f863-42a6-8491-11b9484c6212",
+    "group_type": "C",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:17:24"
+  },
+  {
+    "id": "1b317190-11cb-4ed1-a6d7-0321e16708ef",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:42:11"
+  },
+  {
+    "id": "ac026be8-1587-4fcf-a8cb-2634ef1a2025",
+    "group_type": "C",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:43:07"
+  },
+  {
+    "id": "24090543-6855-4962-bf75-1b1c998a5008",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:46:55"
+  },
+  {
+    "id": "6d3265a9-4c00-41eb-82b0-a6a9d9eed84c",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:50:38"
+  },
+  {
+    "id": "ccf058db-866d-451e-88c2-10e9e14d9c3c",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:51:00"
+  },
+  {
+    "id": "4448bc99-d033-4d64-bfdf-d1b046bd1d80",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 17:53:12"
+  },
+  {
+    "id": "204bd1a9-1d64-4adf-b53e-70c312701437",
+    "group_type": "C",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 18:14:44"
+  },
+  {
+    "id": "f50205e1-d50f-4102-a121-eb115a476bd9",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 18:38:28"
+  },
+  {
+    "id": "b40dc297-1aeb-4459-916b-8c3a50b217f3",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 18:38:34"
+  },
+  {
+    "id": "74966783-59bc-40b0-bb5f-6f7185a1b0cb",
+    "group_type": "B",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 19:04:30"
+  },
+  {
+    "id": "03b69fb5-9cdb-42eb-8fd2-47931242b889",
+    "group_type": "C",
+    "demographics": "{\"age\":25,\"education\":\"bachelors\"}",
+    "created_at": "2026-03-29 19:05:02"
+  }
+]
