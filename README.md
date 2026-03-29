@@ -192,6 +192,8 @@ docker compose down
 
 ## 10. GitHub + 云端部署（Railway 推荐）
 
+从操作系统、进程、网络到各工具职责的**完整部署链条与底层说明**，见 **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**。
+
 ### 10.1 推送到 GitHub
 1. 新建 **Private** 仓库，仅研究团队可访问
 2. 推送 **`arc-cognitive-experiment 2-copy`** 根目录代码
