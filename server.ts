@@ -426,7 +426,14 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(__dirname, 'dist')));
+    const distDir = path.join(__dirname, 'dist');
+    app.use(express.static(distDir));
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api')) return next();
+      res.sendFile(path.join(distDir, 'index.html'), (err) => {
+        if (err) next(err);
+      });
+    });
   }
 
   app.listen(PORT, '0.0.0.0', () => {

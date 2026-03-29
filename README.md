@@ -15,7 +15,7 @@
 - npm
 
 ### 项目路径
-- `arc-cognitive-experiment 2`
+- 开发与部署以 **`arc-cognitive-experiment 2-copy`** 为准（PostgreSQL + Docker + 线上说明）
 
 ---
 
@@ -24,7 +24,7 @@
 在项目根目录执行：
 
 ```bash
-cd "/Users/moriaty/Desktop/人机交互实验/arc-cognitive-experiment 2"
+cd "/Users/moriaty/Desktop/人机交互实验/arc-cognitive-experiment 2-copy"
 npm install
 ```
 
@@ -32,7 +32,10 @@ npm install
 
 ```env
 GEMINI_API_KEY="你的GeminiKey"
+DATABASE_URL="postgres://USER:PASSWORD@HOST:5432/DBNAME"
 ```
+
+本地若用 Docker Compose，可参考 `.env.example` 中的 `DATABASE_URL`。
 
 启动：
 
@@ -187,27 +190,69 @@ docker compose down
 
 ---
 
-## 10. GitHub 可分享部署（推荐）
+## 10. GitHub + 云端部署（Railway 推荐）
 
 ### 10.1 推送到 GitHub
-1. 新建私有仓库（建议 Private）
-2. 推送本项目副本代码
-3. 确认 `.env` 未提交（`.gitignore` 已默认忽略）
+1. 新建 **Private** 仓库，仅研究团队可访问
+2. 推送 **`arc-cognitive-experiment 2-copy`** 根目录代码
+3. 确认 `.env` 未提交（`.gitignore` 已忽略）
 
-### 10.2 平台部署（Render/Railway）
-1. 新建 PostgreSQL 服务
-2. 新建 Web Service，绑定 GitHub 仓库
-3. 设置环境变量：
-   - `GEMINI_API_KEY`
-   - `DATABASE_URL`（平台提供的 PostgreSQL 连接串）
-   - `NODE_ENV=production`
-4. 启动命令：`npm run dev`
+### 10.2 Railway（推荐，最省心）
 
-部署成功后，将平台 URL 发给被试即可在线参与实验。
+1. [Railway](https://railway.app) 控制台：**New Project** → **Deploy from GitHub repo** → 选你的私有仓库
+2. **Add Service** → **Database** → **PostgreSQL**，创建后打开 Postgres 服务，复制 **`DATABASE_URL`**（或 `POSTGRES_URL` 等连接串，以界面为准）
+3. 在 **App（Node）服务** → **Variables** 至少配置：
+   - `GEMINI_API_KEY` = 你的密钥（仅写在平台 Secrets，勿提交仓库）
+   - `DATABASE_URL` = Railway Postgres 提供的连接串（通常可用「Reference」引用 Postgres 变量）
+   - `NODE_ENV` = `production`
+   - `PORT`：Railway 一般自动注入，可不手动填
+4. **构建与启动**（二选一即可）  
+   - **有根目录 `Dockerfile`（默认）**：Railway 会用 Docker 构建，镜像内已执行 `build:pools` 与 `vite build`，启动为 `npm start`（生产模式，静态 `dist` + API）。  
+   - **不用 Docker、走 Nixpacks/Railpack**：在控制台设置 **Build Command**：`npm install && npm run build:pools && npm run build`；**Start Command**：`npm start`  
+   仓库中的 `railway.toml` 已配置 `startCommand` 与健康检查路径 `/api/results`（可与面板合并生效）。
+5. 部署成功后，在 App 服务 **Settings → Networking** 生成公网域名（如 `https://xxx.up.railway.app`），该链接即发给被试的实验地址。
+
+### 10.3 Render（备选）
+
+流程类似：
+
+1. 新建 **PostgreSQL**，记下 **Internal Database URL** 或 **External** 连接串（按 Render 文档选择）
+2. **New Web Service**，连接同一 GitHub 仓库
+3. 环境变量同上：`GEMINI_API_KEY`、`DATABASE_URL`、`NODE_ENV=production`
+4. **Build Command**：`npm install && npm run build:pools && npm run build`  
+   **Start Command**：`npm start`（请勿再用 `npm run dev` 作为线上启动）
+
+### 10.4 上线后如何取数
+
+将 `https://你的域名` 替换为实际上线地址，例如：
+
+| 用途 | 路径 |
+|------|------|
+| 原始作答 JSON | `/api/results` |
+| 行为日志 JSON | `/api/telemetry` |
+| CSV 导出 | `/api/export.csv` |
+| 抽题调试 | `/api/stage-debug` |
+
+示例：`https://your-app.up.railway.app/api/export.csv`
 
 ---
 
 ## 11. 数据看板（Metabase）
+
+### 11.1 本地 Docker（已可用）
+
+```bash
+docker compose up -d
+```
+
+- 实验：`http://localhost:3000`
+- Metabase：`http://localhost:3001`（适合你先搭好仪表板模板）
+
+### 11.2 云端看板（推荐给团队）
+
+在 **Railway** 或 **Render** 再部署一个 **Metabase** 服务（官方镜像或一键模板），**数据库**指向与实验 App **同一套 PostgreSQL**（只读账号更佳）。Dashboard 建好后，通过 Metabase 的 **仅分享只读链接** 给研究团队，勿把数据库管理口令发给被试。
+
+### 11.3 分析问题建议
 
 连接数据库后推荐建立这几个问题（Question）：
 1. 各组完成进度（按 `group_type`, `phase`）
@@ -222,8 +267,9 @@ docker compose down
 
 ## 12. 隐私与安全建议（重要）
 
-1. **永远不要提交** `.env`、密钥、数据库备份文件
-2. GitHub 使用私有仓库，只有研究团队成员可访问
-3. 生产环境变量只在部署平台 Secrets 中配置
-4. 若怀疑密钥泄露，立即在 Google AI Studio 重新生成并替换
-5. 对外只分享实验链接，不分享管理接口或数据库连接信息
+1. **代码与仓库中不要写死**任何 API Key；只用 `.env`（本地）与平台 **Secrets / Variables**（线上）
+2. GitHub 仓库保持 **Private**
+3. **不向被试**提供数据库管理口令、`DATABASE_URL` 全文或 Metabase 管理账号
+4. **定期轮换** `GEMINI_API_KEY`；若曾误提交密钥，立刻在 Google AI Studio 作废并换新
+5. 导出或对外协作前对 CSV/JSON **脱敏**（如 participant id 映射表单独保管）
+6. 对外只分享**实验前端链接**；`/api/*` 若需限制访问，应在网关或后续加鉴权（当前为研究用开放接口，请自行评估风险）

@@ -1,0 +1,7 @@
+# Railway 若检测到根目录 Dockerfile，会用 Docker 构建（已含 build:pools + vite build）。
+# 无 Dockerfile 时可在控制台填写 Build：npm install && npm run build:pools && npm run build
+# https://docs.railway.com/reference/config-as-code
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/results"
+healthcheckTimeout = 120
