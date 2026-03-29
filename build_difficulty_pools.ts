@@ -147,6 +147,17 @@ function main() {
 
   scored.sort((a, b) => a.complexity - b.complexity);
   if (scored.length < 24) {
+    const poolNames = ['arc_pool_low.json', 'arc_pool_medium.json', 'arc_pool_high.json'] as const;
+    const poolsOk = poolNames.every((name) => {
+      const data = readJsonSafe<unknown[]>(path.join(publicDir, name));
+      return Array.isArray(data) && data.length >= 10;
+    });
+    if (poolsOk) {
+      console.warn(
+        `build_difficulty_pools: no ARC sources under ${workspaceRoot} (or 0 after filter); leaving existing public/arc_pool_*.json unchanged.`
+      );
+      return;
+    }
     throw new Error(`Not enough usable ARC tasks (${scored.length}) after filtering.`);
   }
 

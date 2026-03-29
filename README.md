@@ -207,8 +207,8 @@ docker compose down
    - `NODE_ENV` = `production`
    - `PORT`：Railway 一般自动注入，可不手动填
 4. **构建与启动**（二选一即可）  
-   - **有根目录 `Dockerfile`（默认）**：Railway 会用 Docker 构建，镜像内已执行 `build:pools` 与 `vite build`，启动为 `npm start`（生产模式，静态 `dist` + API）。  
-   - **不用 Docker、走 Nixpacks/Railpack**：在控制台设置 **Build Command**：`npm install && npm run build:pools && npm run build`；**Start Command**：`npm start`  
+   - **有根目录 `Dockerfile`（默认）**：Railway 会用 Docker 构建；镜像内只跑 `vite build`（题池使用仓库里已提交的 `public/arc_pool_*.json`，不在镜像内跑 `build:pools`，因 ARC 源数据不在容器里）。启动为 `npm start`。  
+   - **不用 Docker、走 Nixpacks/Railpack**：**Build Command**：`npm install && npm run build`（题池已随仓库提交时足够）。若需从 ARC 源重建题池再构建，用：`npm install && npm run build:pools && npm run build`。**Start Command**：`npm start`  
    仓库中的 `railway.toml` 已配置 `startCommand` 与健康检查路径 `/api/results`（可与面板合并生效）。
 5. 部署成功后，在 App 服务 **Settings → Networking** 生成公网域名（如 `https://xxx.up.railway.app`），该链接即发给被试的实验地址。
 
@@ -219,7 +219,7 @@ docker compose down
 1. 新建 **PostgreSQL**，记下 **Internal Database URL** 或 **External** 连接串（按 Render 文档选择）
 2. **New Web Service**，连接同一 GitHub 仓库
 3. 环境变量同上：`GEMINI_API_KEY`、`DATABASE_URL`、`NODE_ENV=production`
-4. **Build Command**：`npm install && npm run build:pools && npm run build`  
+4. **Build Command**：`npm install && npm run build`（与 Dockerfile 策略一致；题池 JSON 需已在仓库 `public/` 中）  
    **Start Command**：`npm start`（请勿再用 `npm run dev` 作为线上启动）
 
 ### 10.4 上线后如何取数
